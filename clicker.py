@@ -2,15 +2,17 @@ import pyautogui
 import os
 import time
 
-def findAndClick(image):
+def findAndClick(image, confidence=0.95):
     try:
-        x,y = pyautogui.locateCenterOnScreen(image)
+        x,y = pyautogui.locateCenterOnScreen(image, confidence=confidence)
         pyautogui.click(x, y)
+        print(f"Kilk {x},{y}")
     except:
         print(f"Nie znaleziono {image}")
 
 if __name__ == "__main__":
     interval=30
+    confidence=0.95
     filename="toclick.png"
     while True:
         finput = input("nazwa pliku do klikniecia (domyslnie toclick.png):")
@@ -30,8 +32,18 @@ if __name__ == "__main__":
             break
         except:
             pass
-    print(f'Klikne co {interval}s')
+    print(f'"Spróbuję kliknąć co {interval}s')
+    while True:
+        iconfidence = input("Z jaką dokładnośćią szukać? (domyslnie 95):")
+        if iconfidence == "":
+            break
+        try:
+            confidence=int(iconfidence)/100
+            break
+        except:
+            pass
+    print(f'Znajdę z dokładnością {confidence*100}%')
 
     while True:
-        findAndClick(filename)
+        findAndClick(filename,confidence)
         time.sleep(interval)
